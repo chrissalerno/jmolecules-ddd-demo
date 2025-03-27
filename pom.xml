@@ -9,7 +9,7 @@
     <relativePath/>
   </parent>
 
-  <groupId>com.ingka</groupId>
+  <groupId>io.chrissalerno</groupId>
   <artifactId>jmolecules-ddd-demo</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>jmolecules-ddd-demo</name>
