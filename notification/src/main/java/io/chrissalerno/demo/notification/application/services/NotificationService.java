@@ -7,8 +7,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
@@ -21,10 +24,12 @@ public class NotificationService {
     // create reminder notification
     Notification reminderNotification =
         Notification.reminderNotification(reservationId, reminderAt);
+    log.info("Notification reminder notification: {}", reminderNotification);
 
     // create expiration notification
     Notification expirationNotification =
         Notification.reminderNotification(reservationId, expiresAt);
+    log.info("Notification expiration notification: {}", expirationNotification);
 
     // save notifications
     notificationRepository.saveAll(List.of(reminderNotification, expirationNotification));

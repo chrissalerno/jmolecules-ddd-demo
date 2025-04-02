@@ -1,0 +1,32 @@
+server:
+  port: 8081
+
+spring:
+  cloud:
+    function:
+      definition: reservationCreated
+    stream:
+      binders:
+        solace:
+          type: solace
+          environment:
+            solace:
+              java:
+                host: tcp://localhost:55554
+                msgVpn: default
+                clientUsername: admin
+                clientPassword: admin
+      bindings:
+        reservationCreated-in-0:
+          destination: RESERVATION_CREATED_EVENT_QUEUE
+          contentType: application/json
+          group: reservation-created-group
+          consumer:
+            concurrency: 1
+            max-attempts: 2
+          binder: solace
+      solace:
+        bindings:
+          reservationCreated-in-0:
+            consumer:
+              queue-name-expression: "'RESERVATION_CREATED_EVENT_QUEUE'"

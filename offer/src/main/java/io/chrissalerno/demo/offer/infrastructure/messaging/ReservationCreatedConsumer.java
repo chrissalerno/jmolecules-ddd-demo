@@ -24,6 +24,7 @@ public class ReservationCreatedConsumer {
     return reservation -> {
       if (reservation != null) {
         offerService.reserveOffer(OfferId.of(reservation.offerId()));
+        log.info("Reserved offer with id {}", reservation.offerId());
       }
     };
   }
