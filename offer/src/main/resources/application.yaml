@@ -1,0 +1,59 @@
+spring:
+  application.name: offer
+
+  datasource:
+    url: jdbc:h2:mem:offerdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  cloud:
+    function:
+      definition: externalOfferCreated;reservationCreated
+    stream:
+      binders:
+        solace:
+          type: solace
+          environment:
+            solace:
+              java:
+                host: tcp://localhost:55554
+                msgVpn: default
+                clientUsername: admin
+                clientPassword: admin
+      bindings:
+        externalOfferCreated-in-0:
+          destination: EXTERNAL_OFFER_CREATED_EVENT_QUEUE
+          contentType: application/json
+          group: offer-created-group
+          consumer:
+            concurrency: 1
+            max-attempts: 2
+          binder: solace
+        reservationCreated-in-0:
+          destination: RESERVATION_CREATED_EVENT_QUEUE
+          contentType: application/json
+          group: reservation-created-group
+          consumer:
+            concurrency: 1
+            max-attempts: 2
+          binder: solace
+        offerCreatedEvent-out-0:
+          destination: io.chrissalerno/offer/full/created/V1
+          binder: solace
+      solace:
+        bindings:
+          externalOfferCreated-in-0:
+            consumer:
+              queue-name-expression: "'EXTERNAL_OFFER_CREATED_EVENT_QUEUE'"
+          reservationCreated-in-0:
+            consumer:
+              queue-name-expression: "'RESERVATION_CREATED_EVENT_QUEUE'"
+          offerCreated-out-0:
+            producer:
+              queue-name-expression: ""
+      output-bindings: offerCreated-out-0
