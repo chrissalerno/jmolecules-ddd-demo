@@ -5,7 +5,9 @@ import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 import org.jmolecules.archunit.JMoleculesArchitectureRules;
 import org.jmolecules.archunit.JMoleculesDddRules;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 @AnalyzeClasses(packages = "io.chrissalerno.demo.search")
 class JMoleculesRulesTest {
 
