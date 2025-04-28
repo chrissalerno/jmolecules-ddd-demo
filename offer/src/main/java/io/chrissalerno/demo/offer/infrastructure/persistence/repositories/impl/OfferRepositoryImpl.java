@@ -1,5 +1,7 @@
 package io.chrissalerno.demo.offer.infrastructure.persistence.repositories.impl;
 
+import static java.util.Optional.ofNullable;
+
 import io.chrissalerno.demo.offer.domain.Offer;
 import io.chrissalerno.demo.offer.domain.OfferId;
 import io.chrissalerno.demo.offer.domain.Status;
@@ -28,8 +30,11 @@ public class OfferRepositoryImpl implements OfferRepository {
   }
 
   @Override
-  public Optional<OfferEntity> findById(OfferId id) {
-    return offerJPARepository.findById(conversionService.convert(id, UUID.class));
+  public Optional<Offer> findById(OfferId id) {
+    UUID uuid = conversionService.convert(id, UUID.class);
+    return offerJPARepository
+        .findById(uuid)
+        .map(entity -> conversionService.convert(entity, Offer.class));
   }
 
   @Override
